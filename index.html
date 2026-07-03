@@ -1,1 +1,619 @@
-yoo it me yarr
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next-Gen Premium Background</title>
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0A0A0F;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            overflow: hidden;
+        }
+
+        /* ===== 8K CONTAINER - 16:9 ===== */
+        .premium-bg {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: #0A0A0F;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            max-width: 1920px;
+            max-height: 1080px;
+        }
+
+        /* ===== MOBILE 9:16 ===== */
+        @media (max-aspect-ratio: 1/1) {
+            .premium-bg {
+                aspect-ratio: 9 / 16;
+                max-width: 1080px;
+                max-height: 1920px;
+            }
+        }
+
+        /* ===== DEPTH PLANE 1: BASE ===== */
+        .depth-base {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 100% 80% at 50% 60%, rgba(124, 58, 237, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 80% 60% at 30% 40%, rgba(0, 240, 255, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 80% at 70% 30%, rgba(252, 211, 77, 0.03) 0%, transparent 50%),
+                #0A0A0F;
+        }
+
+        /* ===== DEPTH PLANE 2: AURORA BOREALIS WAVES ===== */
+        .aurora-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .aurora-wave {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: auroraFlow 12s ease-in-out infinite;
+        }
+
+        .aurora-wave--1 {
+            width: 800px;
+            height: 300px;
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.20), rgba(124, 58, 237, 0.15));
+            top: -50px;
+            left: -100px;
+            transform: rotate(-15deg);
+            animation-delay: 0s;
+            filter: blur(100px);
+        }
+
+        .aurora-wave--2 {
+            width: 900px;
+            height: 350px;
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.18), rgba(252, 211, 77, 0.10));
+            bottom: -50px;
+            right: -150px;
+            transform: rotate(10deg);
+            animation-delay: -4s;
+            filter: blur(120px);
+        }
+
+        .aurora-wave--3 {
+            width: 700px;
+            height: 250px;
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.12), rgba(124, 58, 237, 0.12));
+            top: 40%;
+            left: 20%;
+            transform: rotate(25deg);
+            animation-delay: -8s;
+            filter: blur(90px);
+        }
+
+        .aurora-wave--4 {
+            width: 600px;
+            height: 200px;
+            background: linear-gradient(90deg, rgba(252, 211, 77, 0.08), rgba(0, 240, 255, 0.08));
+            bottom: 30%;
+            right: 10%;
+            transform: rotate(-20deg);
+            animation-delay: -2s;
+            filter: blur(70px);
+        }
+
+        @keyframes auroraFlow {
+            0%, 100% {
+                transform: rotate(var(--rot, -15deg)) translate(0, 0) scale(1);
+                opacity: 0.6;
+            }
+            25% {
+                transform: rotate(var(--rot, -15deg)) translate(50px, -30px) scale(1.1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: rotate(var(--rot, -15deg)) translate(-30px, 40px) scale(0.9);
+                opacity: 0.5;
+            }
+            75% {
+                transform: rotate(var(--rot, -15deg)) translate(40px, 20px) scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        .aurora-wave--1 { --rot: -15deg; }
+        .aurora-wave--2 { --rot: 10deg; }
+        .aurora-wave--3 { --rot: 25deg; }
+        .aurora-wave--4 { --rot: -20deg; }
+
+        /* ===== DEPTH PLANE 3: VOLUMETRIC FOG ===== */
+        .volumetric-fog {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(0deg, 
+                rgba(10, 10, 15, 0.80) 0%,
+                rgba(124, 58, 237, 0.05) 30%,
+                transparent 100%
+            );
+            pointer-events: none;
+            animation: fogRise 15s ease-in-out infinite;
+        }
+
+        .volumetric-fog--2 {
+            height: 30%;
+            bottom: 0;
+            background: linear-gradient(0deg, 
+                rgba(0, 240, 255, 0.03) 0%,
+                transparent 100%
+            );
+            animation-delay: -5s;
+            animation-duration: 18s;
+        }
+
+        @keyframes fogRise {
+            0%, 100% { opacity: 0.6; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-10px); }
+        }
+
+        /* ===== DEPTH PLANE 4: GLASS/WET SHEEN ===== */
+        .wet-glass {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: 
+                radial-gradient(ellipse 40% 30% at 20% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 60%),
+                radial-gradient(ellipse 30% 40% at 80% 20%, rgba(255, 255, 255, 0.01) 0%, transparent 50%),
+                radial-gradient(ellipse 20% 20% at 50% 50%, rgba(255, 255, 255, 0.01) 0%, transparent 70%);
+            background-blend-mode: overlay;
+        }
+
+        .wet-glass-reflection {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.01) 0%,
+                transparent 30%,
+                rgba(255, 255, 255, 0.005) 50%,
+                transparent 70%,
+                rgba(255, 255, 255, 0.01) 100%
+            );
+            transform: rotate(-20deg);
+            filter: blur(1px);
+        }
+
+        /* ===== DEPTH PLANE 5: CRYSTALS (Diamonds/Hexagons) ===== */
+        .crystal-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .crystal {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            pointer-events: none;
+            animation: crystalFloat 20s ease-in-out infinite;
+            filter: blur(0.5px);
+        }
+
+        /* Diamond shapes (rotated squares) */
+        .crystal-diamond {
+            width: 60px;
+            height: 60px;
+            transform: rotate(45deg);
+            background: linear-gradient(135deg, 
+                rgba(0, 240, 255, 0.02), 
+                rgba(124, 58, 237, 0.02)
+            );
+            border-color: rgba(0, 240, 255, 0.04);
+            box-shadow: 
+                0 0 20px rgba(0, 240, 255, 0.02),
+                inset 0 0 20px rgba(0, 240, 255, 0.01);
+        }
+
+        .crystal-diamond--1 {
+            top: 15%;
+            left: 8%;
+            animation-delay: 0s;
+            width: 80px;
+            height: 80px;
+        }
+
+        .crystal-diamond--2 {
+            bottom: 20%;
+            right: 12%;
+            animation-delay: -5s;
+            width: 50px;
+            height: 50px;
+            border-color: rgba(124, 58, 237, 0.04);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.02);
+        }
+
+        .crystal-diamond--3 {
+            top: 45%;
+            left: 55%;
+            animation-delay: -10s;
+            width: 40px;
+            height: 40px;
+            border-color: rgba(252, 211, 77, 0.03);
+        }
+
+        .crystal-diamond--4 {
+            top: 70%;
+            left: 30%;
+            animation-delay: -3s;
+            width: 35px;
+            height: 35px;
+            border-color: rgba(0, 240, 255, 0.03);
+        }
+
+        .crystal-diamond--5 {
+            top: 25%;
+            right: 25%;
+            animation-delay: -7s;
+            width: 45px;
+            height: 45px;
+            border-color: rgba(124, 58, 237, 0.03);
+        }
+
+        /* Hexagon shapes */
+        .crystal-hexagon {
+            width: 50px;
+            height: 58px;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: linear-gradient(135deg, 
+                rgba(252, 211, 77, 0.01), 
+                rgba(0, 240, 255, 0.01)
+            );
+            border: 1px solid rgba(252, 211, 77, 0.02);
+            box-shadow: 
+                0 0 30px rgba(252, 211, 77, 0.01),
+                inset 0 0 30px rgba(252, 211, 77, 0.005);
+        }
+
+        .crystal-hexagon--1 {
+            top: 30%;
+            left: 20%;
+            animation-delay: -2s;
+            width: 40px;
+            height: 46px;
+        }
+
+        .crystal-hexagon--2 {
+            bottom: 35%;
+            right: 25%;
+            animation-delay: -8s;
+            width: 30px;
+            height: 35px;
+            border-color: rgba(0, 240, 255, 0.02);
+        }
+
+        .crystal-hexagon--3 {
+            top: 10%;
+            right: 15%;
+            animation-delay: -12s;
+            width: 25px;
+            height: 29px;
+            border-color: rgba(124, 58, 237, 0.02);
+        }
+
+        /* Prismatic refraction (rainbow edges) */
+        .crystal::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, 
+                rgba(0, 240, 255, 0.02),
+                rgba(124, 58, 237, 0.02),
+                rgba(252, 211, 77, 0.02),
+                rgba(0, 240, 255, 0.02)
+            );
+            filter: blur(1px);
+            opacity: 0.3;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+
+        .crystal-diamond::after {
+            border-radius: 4px;
+        }
+
+        @keyframes crystalFloat {
+            0%, 100% {
+                transform: rotate(var(--rot, 45deg)) translate(0, 0) scale(1);
+                opacity: 0.4;
+            }
+            25% {
+                transform: rotate(var(--rot, 45deg)) translate(15px, -20px) scale(1.05);
+                opacity: 0.7;
+            }
+            50% {
+                transform: rotate(var(--rot, 45deg)) translate(-10px, 15px) scale(0.95);
+                opacity: 0.3;
+            }
+            75% {
+                transform: rotate(var(--rot, 45deg)) translate(20px, 10px) scale(1.02);
+                opacity: 0.6;
+            }
+        }
+
+        .crystal-diamond { --rot: 45deg; }
+        .crystal-hexagon { --rot: 0deg; }
+
+        /* ===== DEPTH PLANE 6: SPARKLE PARTICLES ===== */
+        .sparkle-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .sparkle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent);
+            animation: sparkleTwinkle 4s ease-in-out infinite;
+        }
+
+        .sparkle:nth-child(1) { width: 2px; height: 2px; top: 10%; left: 15%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { width: 1.5px; height: 1.5px; top: 20%; left: 75%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { width: 2.5px; height: 2.5px; top: 35%; left: 45%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { width: 1px; height: 1px; top: 50%; left: 85%; animation-delay: 1.5s; }
+        .sparkle:nth-child(5) { width: 2px; height: 2px; top: 65%; left: 25%; animation-delay: 2s; }
+        .sparkle:nth-child(6) { width: 1.5px; height: 1.5px; top: 75%; left: 65%; animation-delay: 2.5s; }
+        .sparkle:nth-child(7) { width: 2px; height: 2px; top: 85%; left: 10%; animation-delay: 3s; }
+        .sparkle:nth-child(8) { width: 1px; height: 1px; top: 5%; left: 50%; animation-delay: 0.3s; }
+        .sparkle:nth-child(9) { width: 2.5px; height: 2.5px; top: 45%; left: 5%; animation-delay: 0.8s; }
+        .sparkle:nth-child(10) { width: 1.5px; height: 1.5px; top: 60%; left: 95%; animation-delay: 1.2s; }
+        .sparkle:nth-child(11) { width: 2px; height: 2px; top: 15%; left: 35%; animation-delay: 1.8s; }
+        .sparkle:nth-child(12) { width: 1px; height: 1px; top: 40%; left: 65%; animation-delay: 2.2s; }
+        .sparkle:nth-child(13) { width: 2px; height: 2px; top: 70%; left: 40%; animation-delay: 2.8s; }
+        .sparkle:nth-child(14) { width: 1.5px; height: 1.5px; top: 90%; left: 80%; animation-delay: 3.2s; }
+        .sparkle:nth-child(15) { width: 2.5px; height: 2.5px; top: 30%; left: 90%; animation-delay: 3.6s; }
+
+        @keyframes sparkleTwinkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 0.6; transform: scale(1); }
+        }
+
+        /* ===== LIGHT LEAKS ===== */
+        .light-leak {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(150px);
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        .light-leak--1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.15), transparent 70%);
+            top: -100px;
+            right: 10%;
+            animation: leakFloat1 15s ease-in-out infinite;
+        }
+
+        .light-leak--2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.12), transparent 70%);
+            bottom: -150px;
+            left: 5%;
+            animation: leakFloat2 18s ease-in-out infinite reverse;
+        }
+
+        .light-leak--3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(252, 211, 77, 0.08), transparent 70%);
+            top: 40%;
+            left: 50%;
+            animation: leakFloat3 20s ease-in-out infinite 3s;
+        }
+
+        @keyframes leakFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -40px) scale(1.1); }
+            66% { transform: translate(-20px, 30px) scale(0.9); }
+        }
+
+        @keyframes leakFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-40px, 30px) scale(1.08); }
+            66% { transform: translate(20px, -30px) scale(0.92); }
+        }
+
+        @keyframes leakFloat3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.12); }
+        }
+
+        /* ===== CINEMA VIGNETTE ===== */
+        .cinema-vignette {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: 
+                radial-gradient(ellipse 70% 70% at 50% 50%, transparent 30%, rgba(10, 10, 15, 0.20) 60%, rgba(10, 10, 15, 0.50) 80%, rgba(10, 10, 15, 0.80) 100%),
+                radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(10, 10, 15, 0.15) 100%);
+            animation: vignettePulse 10s ease-in-out infinite;
+        }
+
+        @keyframes vignettePulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== SUBTLE NOISE ===== */
+        .noise {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.015;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+            mix-blend-mode: overlay;
+        }
+
+        /* ===== 3D DEPTH OVERLAY ===== */
+        .depth-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: 
+                radial-gradient(ellipse 50% 30% at 40% 60%, rgba(0, 240, 255, 0.01) 0%, transparent 60%),
+                radial-gradient(ellipse 30% 50% at 60% 40%, rgba(124, 58, 237, 0.01) 0%, transparent 60%);
+            filter: blur(2px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .aurora-wave--1 { width: 500px; height: 200px; filter: blur(60px); }
+            .aurora-wave--2 { width: 600px; height: 250px; filter: blur(70px); }
+            .aurora-wave--3 { width: 400px; height: 180px; filter: blur(50px); }
+            .aurora-wave--4 { width: 350px; height: 150px; filter: blur(40px); }
+
+            .light-leak--1 { width: 300px; height: 300px; filter: blur(100px); }
+            .light-leak--2 { width: 350px; height: 350px; filter: blur(100px); }
+            .light-leak--3 { width: 250px; height: 250px; filter: blur(80px); }
+
+            .crystal-diamond--1 { width: 50px; height: 50px; }
+            .crystal-diamond--2 { width: 35px; height: 35px; }
+            .crystal-diamond--3 { width: 25px; height: 25px; }
+            .crystal-diamond--4 { width: 20px; height: 20px; }
+            .crystal-diamond--5 { width: 30px; height: 30px; }
+
+            .crystal-hexagon--1 { width: 30px; height: 35px; }
+            .crystal-hexagon--2 { width: 20px; height: 23px; }
+            .crystal-hexagon--3 { width: 18px; height: 21px; }
+
+            .volumetric-fog { height: 40%; }
+            .volumetric-fog--2 { height: 25%; }
+        }
+
+        @media (max-width: 480px) {
+            .aurora-wave--1 { width: 350px; height: 150px; filter: blur(40px); }
+            .aurora-wave--2 { width: 400px; height: 180px; filter: blur(50px); }
+            .aurora-wave--3 { width: 300px; height: 120px; filter: blur(30px); }
+            .aurora-wave--4 { width: 250px; height: 100px; filter: blur(30px); }
+
+            .light-leak--1 { width: 200px; height: 200px; filter: blur(60px); }
+            .light-leak--2 { width: 250px; height: 250px; filter: blur(60px); }
+            .light-leak--3 { width: 180px; height: 180px; filter: blur(50px); }
+
+            .crystal-diamond--1 { width: 35px; height: 35px; }
+            .crystal-diamond--2 { width: 25px; height: 25px; }
+            .crystal-diamond--3 { width: 18px; height: 18px; }
+            .crystal-diamond--4 { width: 15px; height: 15px; }
+            .crystal-diamond--5 { width: 20px; height: 20px; }
+
+            .crystal-hexagon--1 { width: 20px; height: 23px; }
+            .crystal-hexagon--2 { width: 15px; height: 18px; }
+            .crystal-hexagon--3 { width: 12px; height: 14px; }
+
+            .volumetric-fog { height: 35%; }
+            .volumetric-fog--2 { height: 20%; }
+        }
+
+        /* ===== SCREENSHOT READY ===== */
+        @media print {
+            .premium-bg {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="premium-bg">
+
+        <!-- ===== DEPTH PLANE 1: BASE ===== -->
+        <div class="depth-base"></div>
+
+        <!-- ===== DEPTH PLANE 2: AURORA WAVES ===== -->
+        <div class="aurora-container">
+            <div class="aurora-wave aurora-wave--1"></div>
+            <div class="aurora-wave aurora-wave--2"></div>
+            <div class="aurora-wave aurora-wave--3"></div>
+            <div class="aurora-wave aurora-wave--4"></div>
+        </div>
+
+        <!-- ===== DEPTH PLANE 3: FOG ===== -->
+        <div class="volumetric-fog"></div>
+        <div class="volumetric-fog volumetric-fog--2"></div>
+
+        <!-- ===== DEPTH PLANE 4: WET GLASS ===== -->
+        <div class="wet-glass"></div>
+        <div class="wet-glass-reflection"></div>
+
+        <!-- ===== DEPTH PLANE 5: CRYSTALS ===== -->
+        <div class="crystal-container">
+            <div class="crystal crystal-diamond crystal-diamond--1"></div>
+            <div class="crystal crystal-diamond crystal-diamond--2"></div>
+            <div class="crystal crystal-diamond crystal-diamond--3"></div>
+            <div class="crystal crystal-diamond crystal-diamond--4"></div>
+            <div class="crystal crystal-diamond crystal-diamond--5"></div>
+            <div class="crystal crystal-hexagon crystal-hexagon--1"></div>
+            <div class="crystal crystal-hexagon crystal-hexagon--2"></div>
+            <div class="crystal crystal-hexagon crystal-hexagon--3"></div>
+        </div>
+
+        <!-- ===== DEPTH PLANE 6: SPARKLES ===== -->
+        <div class="sparkle-container">
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+        </div>
+
+        <!-- ===== LIGHT LEAKS ===== -->
+        <div class="light-leak light-leak--1"></div>
+        <div class="light-leak light-leak--2"></div>
+        <div class="light-leak light-leak--3"></div>
+
+        <!-- ===== CINEMA VIGNETTE ===== -->
+        <div class="cinema-vignette"></div>
+
+        <!-- ===== NOISE ===== -->
+        <div class="noise"></div>
+
+        <!-- ===== 3D DEPTH ===== -->
+        <div class="depth-overlay"></div>
+
+        <!-- ===== NO TEXT, NO UI ===== -->
+        <!-- Pure visual art -->
+
+    </div>
+</body>
+</html>
