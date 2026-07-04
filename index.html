@@ -4,17 +4,21 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
+html, body {
   min-height: 100vh;
   min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+body {
   display: flex;
   align-items: center;
   justify-content: center;
   background: #07070B;
-  overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   perspective: 1000px;
   transition: background 0.5s ease;
+  padding: 16px;
 }
 
 /* Light theme */
@@ -40,6 +44,17 @@ body.light .eye-toggle:hover { color: rgba(0,0,0,0.7); }
 body.light .tab-btn { color: rgba(0,0,0,0.4); }
 body.light .tab-btn.active { color: #1a1a2e; border-bottom-color: #7C3AED; }
 body.light .vignette { background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.05) 100%); }
+body.light .remember-label { color: rgba(0,0,0,0.5); }
+body.light .social-btn { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.08) !important; color: #1a1a2e !important; }
+body.light .divider { color: rgba(0,0,0,0.2); }
+body.light .divider::before,
+body.light .divider::after { background: rgba(0,0,0,0.06); }
+body.light .theme-toggle {
+  background: rgba(0,0,0,0.05);
+  border-color: rgba(0,0,0,0.08);
+  color: #1a1a2e;
+}
+body.light .caps-warning { color: #D97706; }
 
 /* ===== BACKGROUND ===== */
 .background {
@@ -51,6 +66,7 @@ body.light .vignette { background: radial-gradient(ellipse at center, transparen
     radial-gradient(ellipse at 80% 50%, #06B6D415 0%, transparent 50%),
     radial-gradient(ellipse at 50% 100%, #EC489910 0%, transparent 40%),
     #07070B;
+  pointer-events: none;
 }
 
 .orb-1 {
@@ -163,31 +179,91 @@ body.light .vignette { background: radial-gradient(ellipse at center, transparen
   transition: transform 0.1s ease-out;
   width: 100%;
   max-width: 420px;
-  margin: 20px;
+  margin: 0 auto;
 }
 
 /* === GLASS CARD === */
 .login-card {
   width: 100%;
-  padding: clamp(32px, 5vw, 56px);
+  padding: clamp(24px, 5vw, 48px);
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: clamp(20px, 3vw, 32px);
+  border-radius: clamp(16px, 3vw, 28px);
   box-shadow: 
     0 30px 80px -20px rgba(0,0,0,0.8),
     inset 0 1px 0 rgba(255,255,255,0.05);
-  animation: cardFade 1.5s ease-out;
   transform-style: preserve-3d;
-  transition: background 0.5s ease, border 0.5s ease;
+  transition: background 0.5s ease, border 0.5s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card entrance animation */
+.login-card.card-enter {
+  animation: cardFadeIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Card exit animation for switching */
+.login-card.card-exit {
+  animation: cardFadeOut 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes cardFadeIn {
+  0% { 
+    opacity: 0; 
+    transform: translateY(40px) scale(0.95) rotateX(5deg);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1) rotateX(0deg);
+  }
+}
+
+@keyframes cardFadeOut {
+  0% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1) rotateX(0deg);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-30px) scale(0.95) rotateX(-5deg);
+  }
+}
+
+/* Shimmer effect on card switch */
+.login-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: clamp(16px, 3vw, 28px);
+  background: linear-gradient(135deg, 
+    transparent 0%, 
+    rgba(6, 182, 212, 0.05) 50%, 
+    transparent 100%
+  );
+  background-size: 300% 300%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.login-card.switching::after {
+  opacity: 1;
+  animation: shimmerCard 1s ease-in-out;
+}
+
+@keyframes shimmerCard {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .login-card::before {
   content: '';
   position: absolute;
   inset: -1px;
-  border-radius: clamp(20px, 3vw, 32px);
+  border-radius: clamp(16px, 3vw, 28px);
   background: linear-gradient(135deg, 
     rgba(6, 182, 212, 0.3), 
     rgba(124, 58, 237, 0.3),
@@ -205,53 +281,52 @@ body.light .vignette { background: radial-gradient(ellipse at center, transparen
   padding: 1px;
 }
 
-/* ===== THEME TOGGLE (Item 14) ===== */
+/* ===== THEME TOGGLE ===== */
 .theme-toggle {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: clamp(12px, 2vw, 20px);
+  right: clamp(12px, 2vw, 20px);
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: clamp(32px, 4vw, 40px);
+  height: clamp(32px, 4vw, 40px);
   color: white;
   cursor: pointer;
   backdrop-filter: blur(10px);
   transition: all 0.3s;
-  font-size: 18px;
+  font-size: clamp(14px, 2vw, 18px);
   z-index: 20;
-}
-
-body.light .theme-toggle {
-  background: rgba(0,0,0,0.05);
-  border-color: rgba(0,0,0,0.08);
-  color: #1a1a2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .theme-toggle:hover {
   transform: scale(1.1) rotate(20deg);
 }
 
-/* ===== TABS: Sign In / Sign Up ===== */
+/* ===== TABS ===== */
 .tabs {
   display: flex;
-  gap: 24px;
-  margin-bottom: 28px;
+  gap: clamp(16px, 3vw, 24px);
+  margin-bottom: clamp(20px, 3vw, 28px);
   border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding-bottom: 12px;
+  padding-bottom: clamp(8px, 1.5vw, 12px);
 }
 
 .tab-btn {
   background: none;
   border: none;
   color: rgba(255,255,255,0.4);
-  font-size: 16px;
+  font-size: clamp(14px, 1.8vw, 16px);
   font-weight: 500;
   cursor: pointer;
   padding: 4px 0;
   transition: all 0.3s;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .tab-btn.active {
@@ -273,13 +348,36 @@ body.light .theme-toggle {
   color: rgba(255,255,255,0.7);
 }
 
-body.light .tab-btn { color: rgba(0,0,0,0.4); }
-body.light .tab-btn.active { color: #1a1a2e; }
-body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, #7C3AED); }
+.tab-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===== CONTENT WRAPPER FOR ANIMATIONS ===== */
+.content-wrapper {
+  transition: all 0.3s ease;
+}
+
+.content-wrapper.slide-in {
+  animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.content-wrapper.slide-out {
+  animation: slideOut 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideIn {
+  0% { opacity: 0; transform: translateX(20px) scale(0.98); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes slideOut {
+  0% { opacity: 1; transform: translateX(0) scale(1); }
+  100% { opacity: 0; transform: translateX(-20px) scale(0.98); }
+}
 
 .login-card h2 {
   color: rgba(255,255,255,0.9);
-  font-size: clamp(24px, 3vw, 32px);
+  font-size: clamp(20px, 3vw, 28px);
   font-weight: 600;
   margin-bottom: 4px;
   letter-spacing: -0.5px;
@@ -288,8 +386,8 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
 
 .login-card .subtitle {
   color: rgba(255,255,255,0.4);
-  font-size: 14px;
-  margin-bottom: 32px;
+  font-size: clamp(12px, 1.4vw, 14px);
+  margin-bottom: clamp(20px, 3vw, 32px);
   transition: color 0.5s ease;
 }
 
@@ -297,19 +395,22 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
 .input-wrapper {
   position: relative;
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: clamp(12px, 1.8vw, 16px);
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 16px 48px 16px 20px;
+  padding: clamp(14px, 1.8vw, 16px) clamp(40px, 5vw, 48px) clamp(14px, 1.8vw, 16px) clamp(14px, 1.8vw, 20px);
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 12px;
+  border-radius: clamp(10px, 1.5vw, 12px);
   color: white;
-  font-size: 16px;
+  font-size: clamp(14px, 1.6vw, 16px);
   transition: all 0.3s;
   backdrop-filter: blur(10px);
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: clamp(48px, 6vw, 56px);
 }
 
 .input-wrapper input:focus {
@@ -351,11 +452,11 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
 /* ===== CUSTOM EYE ===== */
 .eye-toggle {
   position: absolute;
-  right: 16px;
+  right: clamp(10px, 1.5vw, 16px);
   top: 50%;
   transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
+  width: clamp(20px, 2.5vw, 24px);
+  height: clamp(20px, 2.5vw, 24px);
   cursor: pointer;
   color: rgba(255,255,255,0.35);
   transition: all 0.3s;
@@ -366,6 +467,9 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
   justify-content: center;
   padding: 0;
   z-index: 5;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .eye-toggle:hover {
@@ -378,8 +482,8 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
 }
 
 .eye-toggle svg {
-  width: 22px;
-  height: 22px;
+  width: clamp(18px, 2.2vw, 22px);
+  height: clamp(18px, 2.2vw, 22px);
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -392,7 +496,109 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
   transform: scale(1.1);
 }
 
-/* ===== ERROR STATE (Item 11) ===== */
+/* ===== REMEMBER ME & FORGOT PASSWORD ===== */
+.remember-forgot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: clamp(4px, 1vw, 8px) 0 clamp(12px, 2vw, 20px);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.remember-label {
+  color: rgba(255,255,255,0.4);
+  font-size: clamp(12px, 1.4vw, 14px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s;
+}
+
+.remember-label:hover {
+  color: rgba(255,255,255,0.6);
+}
+
+.remember-label input[type="checkbox"] {
+  accent-color: #7C3AED;
+  width: clamp(14px, 1.6vw, 16px);
+  height: clamp(14px, 1.6vw, 16px);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.forgot-link {
+  color: #06B6D4;
+  font-size: clamp(12px, 1.4vw, 14px);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.forgot-link:hover {
+  color: #7C3AED;
+  text-decoration: underline;
+}
+
+/* ===== SOCIAL LOGIN ===== */
+.social-login {
+  display: flex;
+  gap: clamp(8px, 1.5vw, 12px);
+  margin: clamp(12px, 2vw, 20px) 0;
+}
+
+.social-btn {
+  flex: 1;
+  padding: clamp(10px, 1.4vw, 12px);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: clamp(10px, 1.5vw, 12px);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 1vw, 8px);
+  font-size: clamp(12px, 1.4vw, 14px);
+  -webkit-tap-highlight-color: transparent;
+  min-height: clamp(40px, 5vw, 48px);
+}
+
+.social-btn:hover {
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.02);
+  border-color: rgba(255,255,255,0.15);
+}
+
+.social-btn:active {
+  transform: scale(0.98);
+}
+
+.social-btn svg {
+  width: clamp(16px, 2vw, 20px);
+  height: clamp(16px, 2vw, 20px);
+  flex-shrink: 0;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2vw, 16px);
+  margin: clamp(12px, 2vw, 16px) 0;
+  color: rgba(255,255,255,0.2);
+  font-size: clamp(10px, 1.2vw, 12px);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+}
+
+/* ===== ERROR STATE ===== */
 .input-wrapper.error input {
   border-color: rgba(239, 68, 68, 0.6);
   background: rgba(239, 68, 68, 0.08);
@@ -402,9 +608,9 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
 
 .error-message {
   color: rgba(239, 68, 68, 0.8);
-  font-size: 12px;
+  font-size: clamp(11px, 1.3vw, 12px);
   margin-top: -10px;
-  margin-bottom: 16px;
+  margin-bottom: clamp(12px, 2vw, 16px);
   padding-left: 4px;
   opacity: 0;
   transform: translateY(-10px);
@@ -419,21 +625,37 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
   height: 20px;
 }
 
+/* ===== CAPS LOCK WARNING ===== */
+.caps-warning {
+  color: #F59E0B;
+  font-size: clamp(11px, 1.3vw, 12px);
+  margin-top: -8px;
+  margin-bottom: clamp(4px, 1vw, 8px);
+  padding-left: 4px;
+  display: none;
+}
+
+.caps-warning.show {
+  display: block;
+}
+
 /* ===== LOGIN BUTTON ===== */
 .login-card button[type="submit"] {
   width: 100%;
-  padding: 16px;
+  padding: clamp(14px, 1.8vw, 16px);
   background: linear-gradient(135deg, #06B6D4, #7C3AED);
   border: none;
-  border-radius: 12px;
+  border-radius: clamp(10px, 1.5vw, 12px);
   color: white;
-  font-size: 16px;
+  font-size: clamp(14px, 1.6vw, 16px);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
   position: relative;
   overflow: hidden;
-  margin-top: 8px;
+  margin-top: clamp(4px, 1vw, 8px);
+  -webkit-tap-highlight-color: transparent;
+  min-height: clamp(48px, 6vw, 56px);
 }
 
 .login-card button[type="submit"]:hover {
@@ -457,8 +679,8 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
 .login-card button[type="submit"].loading::before {
   content: '';
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: clamp(18px, 2.5vw, 20px);
+  height: clamp(18px, 2.5vw, 20px);
   border: 2px solid rgba(255,255,255,0.3);
   border-top-color: white;
   border-radius: 50%;
@@ -468,7 +690,6 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
   transform: translate(-50%, -50%);
 }
 
-/* ===== SUCCESS STATE ===== */
 .login-card button[type="submit"].success {
   background: linear-gradient(135deg, #10B981, #059669) !important;
 }
@@ -511,11 +732,6 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
   50% { opacity: 0.8; transform: scale(1.2); }
 }
 
-@keyframes cardFade {
-  0% { opacity: 0; transform: translateY(30px) scale(0.95); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
 @keyframes errorShake {
   0%, 100% { transform: translateX(0); }
   20% { transform: translateX(-10px); }
@@ -539,7 +755,7 @@ body.light .tab-btn.active::after { background: linear-gradient(90deg, #06B6D4, 
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* ===== CUSTOM SCROLLBAR (Item 15) ===== */
+/* ===== CUSTOM SCROLLBAR ===== */
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -562,17 +778,182 @@ body.light ::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #06B6D4, #7C3AED);
 }
 
-/* ===== RESPONSIVE ===== */
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Tablets and small laptops */
+@media (max-width: 768px) {
+  body { padding: 20px; }
+  .tilt-container { max-width: 400px; }
+  .login-card { padding: 32px; }
+}
+
+/* Large phones */
 @media (max-width: 480px) {
+  body { padding: 12px; }
+  .tilt-container { max-width: 100%; }
+  .login-card { padding: 24px; border-radius: 20px; }
+  
   .orb-1 { width: 80vmin; height: 80vmin; top: -20%; left: -30%; }
   .orb-2 { width: 60vmin; height: 60vmin; bottom: -10%; right: -30%; }
   .orb-3 { width: 40vmin; height: 40vmin; top: 40%; right: -10%; }
   .orb-4 { width: 30vmin; height: 30vmin; bottom: 20%; left: -10%; }
   .aurora { height: 30%; bottom: -5%; }
-  .tilt-container { margin: 12px; }
-  .input-wrapper input { padding: 14px 44px 14px 16px; font-size: 16px; }
-  .eye-toggle { right: 12px; }
-  .theme-toggle { width: 36px; height: 36px; font-size: 16px; top: 16px; right: 16px; }
+  
+  .social-login { flex-direction: column; }
+  .remember-forgot { flex-direction: column; align-items: flex-start; gap: 4px; }
+  
+  .eye-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    right: 8px;
+  }
+  
+  .input-wrapper input {
+    padding-right: 48px;
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+  
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+    top: 12px;
+    right: 12px;
+  }
+  
+  /* Improve touch targets */
+  .tab-btn { padding: 8px 0; }
+  .social-btn { min-height: 44px; }
+  .login-card button[type="submit"] { min-height: 50px; }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  body { padding: 8px; }
+  .login-card { padding: 16px; border-radius: 16px; }
+  .tabs { gap: 12px; }
+  .tab-btn { font-size: 13px; }
+  .login-card h2 { font-size: 18px; }
+  .login-card .subtitle { font-size: 11px; margin-bottom: 16px; }
+  .input-wrapper input { padding: 12px 40px 12px 12px; font-size: 14px; min-height: 40px; }
+  .eye-toggle { right: 4px; min-width: 36px; min-height: 36px; }
+  .eye-toggle svg { width: 16px; height: 16px; }
+  .social-btn { font-size: 11px; padding: 8px; min-height: 36px; }
+  .remember-label { font-size: 11px; }
+  .forgot-link { font-size: 11px; }
+  .login-card button[type="submit"] { padding: 12px; font-size: 14px; min-height: 44px; }
+  .theme-toggle { width: 32px; height: 32px; font-size: 12px; top: 8px; right: 8px; }
+  .content-wrapper.slide-in { animation-duration: 0.4s; }
+  .content-wrapper.slide-out { animation-duration: 0.2s; }
+}
+
+/* Landscape phones */
+@media (max-height: 600px) and (orientation: landscape) {
+  body { padding: 8px; align-items: flex-start; padding-top: 20px; }
+  .login-card { padding: 16px; }
+  .login-card h2 { font-size: 18px; margin-bottom: 2px; }
+  .login-card .subtitle { font-size: 11px; margin-bottom: 12px; }
+  .input-wrapper { margin-bottom: 8px; }
+  .input-wrapper input { padding: 10px 40px 10px 12px; min-height: 36px; font-size: 13px; }
+  .tabs { margin-bottom: 12px; padding-bottom: 6px; }
+  .tab-btn { font-size: 13px; }
+  .remember-forgot { margin: 4px 0 8px; }
+  .social-login { margin: 8px 0; }
+  .social-btn { padding: 6px; min-height: 32px; font-size: 11px; }
+  .divider { margin: 8px 0; }
+  .login-card button[type="submit"] { padding: 10px; min-height: 38px; font-size: 13px; margin-top: 4px; }
+  .theme-toggle { width: 30px; height: 30px; font-size: 12px; top: 8px; right: 8px; }
+  .eye-toggle { min-width: 36px; min-height: 36px; }
+  .error-message { font-size: 10px; margin-bottom: 8px; }
+  .caps-warning { font-size: 10px; }
+}
+
+/* High DPI / Retina displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .login-card { backdrop-filter: blur(60px); -webkit-backdrop-filter: blur(60px); }
+}
+
+/* Dark mode preference */
+@media (prefers-color-scheme: dark) {
+  body:not(.light) { background: #07070B; }
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .login-card.card-enter,
+  .login-card.card-exit,
+  .content-wrapper.slide-in,
+  .content-wrapper.slide-out {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .login-card::after,
+  .login-card::before,
+  .orb-1, .orb-2, .orb-3, .orb-4,
+  .aurora, .particle {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* Touch devices - disable hover on touch */
+@media (hover: none) {
+  .social-btn:hover,
+  .login-card button[type="submit"]:hover,
+  .theme-toggle:hover,
+  .eye-toggle:hover,
+  .tab-btn:hover,
+  .forgot-link:hover,
+  .remember-label:hover {
+    transform: none !important;
+  }
+  
+  .social-btn:active,
+  .login-card button[type="submit"]:active,
+  .theme-toggle:active,
+  .eye-toggle:active,
+  .tab-btn:active {
+    transform: scale(0.95) !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .background,
+  .particles,
+  .vignette,
+  .orb-1, .orb-2, .orb-3, .orb-4,
+  .aurora {
+    display: none !important;
+  }
+  
+  .login-card {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  .login-card h2,
+  .login-card .subtitle,
+  .input-wrapper input,
+  .tab-btn,
+  .remember-label,
+  .forgot-link,
+  .social-btn,
+  .divider {
+    color: #333 !important;
+  }
+  
+  .login-card button[type="submit"] {
+    background: #333 !important;
+    color: white !important;
+  }
 }
 </style>
 </head>
@@ -597,96 +978,177 @@ body.light ::-webkit-scrollbar-thumb {
 
 <!-- ===== 3D TILT CARD ===== -->
 <div class="tilt-container" id="tiltContainer">
-  <div class="login-card">
+  <div class="login-card card-enter" id="loginCard">
     
-    <!-- Theme Toggle (Item 14) -->
+    <!-- Theme Toggle -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
       🌓
     </button>
     
     <!-- Tabs: Sign In / Sign Up -->
     <div class="tabs">
-      <button class="tab-btn active" data-tab="signin">Sign In</button>
-      <button class="tab-btn" data-tab="signup">Sign Up</button>
+      <button class="tab-btn active" data-tab="signin" id="signinTab">Sign In</button>
+      <button class="tab-btn" data-tab="signup" id="signupTab">Sign Up</button>
     </div>
     
-    <h2 id="formTitle">Welcome Back</h2>
-    <p class="subtitle" id="formSubtitle">Sign in to continue your premium experience</p>
-    
-    <!-- Email Input -->
-    <div class="input-wrapper">
-      <input type="email" id="emailInput" placeholder="Email address" autocomplete="email" />
-    </div>
-    
-    <!-- Password Input -->
-    <div class="input-wrapper" id="passwordWrapper">
-      <input type="password" id="passwordInput" placeholder="Password" autocomplete="current-password" />
-      <button type="button" class="eye-toggle" id="eyeToggle" aria-label="Toggle password visibility">
-        <svg viewBox="0 0 24 24" id="eyeIcon">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
+    <!-- Content Wrapper for animations -->
+    <div class="content-wrapper slide-in" id="contentWrapper">
+      <h2 id="formTitle">Welcome Back</h2>
+      <p class="subtitle" id="formSubtitle">Sign in to continue your premium experience</p>
+      
+      <!-- Email Input -->
+      <div class="input-wrapper">
+        <input type="email" id="emailInput" placeholder="Email address" autocomplete="email" title="Enter your registered email address" />
+      </div>
+      
+      <!-- Password Input -->
+      <div class="input-wrapper" id="passwordWrapper">
+        <input type="password" id="passwordInput" placeholder="Password" autocomplete="current-password" title="Password must be at least 8 characters" />
+        <button type="button" class="eye-toggle" id="eyeToggle" aria-label="Toggle password visibility">
+          <svg viewBox="0 0 24 24" id="eyeIcon">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Caps Lock Warning -->
+      <div class="caps-warning" id="capsWarning">⚠️ Caps Lock is on</div>
+      
+      <!-- Remember Me & Forgot Password -->
+      <div class="remember-forgot" id="rememberForgot">
+        <label class="remember-label">
+          <input type="checkbox" id="rememberMe" /> Remember me
+        </label>
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+      
+      <!-- Error Message -->
+      <div class="error-message" id="errorMessage">
+        ⚠️ Invalid email or password. Please try again.
+      </div>
+      
+      <!-- Sign Up extra field -->
+      <div class="input-wrapper" id="confirmWrapper" style="display:none;">
+        <input type="password" id="confirmInput" placeholder="Confirm Password" title="Re-enter your password to confirm" />
+      </div>
+      
+      <!-- Social Login -->
+      <div class="divider">or continue with</div>
+      <div class="social-login">
+        <button class="social-btn" id="googleBtn">
+          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#4285F4" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#34A853" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#FBBC05" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google
+        </button>
+        <button class="social-btn" id="githubBtn">
+          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.253-.447-1.27.098-2.646 0 0 .84-.269 2.75 1.025.8-.223 1.65-.334 2.5-.334.85 0 1.7.111 2.5.334 1.91-1.294 2.75-1.025 2.75-1.025.545 1.376.201 2.393.099 2.646.64.698 1.03 1.591 1.03 2.682 0 3.841-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          GitHub
+        </button>
+      </div>
+      
+      <button type="submit" id="loginButton">
+        <span class="btn-text">Sign In</span>
       </button>
     </div>
-    
-    <!-- Error Message (Item 11 - auto dismiss) -->
-    <div class="error-message" id="errorMessage">
-      ⚠️ Invalid email or password. Please try again.
-    </div>
-    
-    <!-- Sign Up extra field (hidden by default) -->
-    <div class="input-wrapper" id="confirmWrapper" style="display:none;">
-      <input type="password" id="confirmInput" placeholder="Confirm Password" />
-    </div>
-    
-    <button type="submit" id="loginButton">
-      <span class="btn-text">Sign In</span>
-    </button>
   </div>
 </div>
 
 <script>
 // ============================================
-// 1. TABS: Sign In / Sign Up
+// 1. PRO TAB SWITCHING WITH ANIMATIONS
 // ============================================
-const tabBtns = document.querySelectorAll('.tab-btn');
+const signinTab = document.getElementById('signinTab');
+const signupTab = document.getElementById('signupTab');
+const loginCard = document.getElementById('loginCard');
+const contentWrapper = document.getElementById('contentWrapper');
 const formTitle = document.getElementById('formTitle');
 const formSubtitle = document.getElementById('formSubtitle');
 const loginButton = document.getElementById('loginButton');
 const btnText = loginButton.querySelector('.btn-text');
 const confirmWrapper = document.getElementById('confirmWrapper');
+const rememberForgot = document.getElementById('rememberForgot');
+const emailInput = document.getElementById('emailInput');
+const passwordInput = document.getElementById('passwordInput');
+const confirmInput = document.getElementById('confirmInput');
 
-tabBtns.forEach(btn => {
-  btn.addEventListener('click', function() {
-    tabBtns.forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    
-    const isSignUp = this.dataset.tab === 'signup';
-    
+let isAnimating = false;
+
+function switchTab(tab) {
+  if (isAnimating) return;
+  isAnimating = true;
+  
+  const isSignUp = tab === 'signup';
+  
+  // Remove active class from both tabs
+  signinTab.classList.remove('active');
+  signupTab.classList.remove('active');
+  
+  // Add active to selected tab
+  if (isSignUp) {
+    signupTab.classList.add('active');
+  } else {
+    signinTab.classList.add('active');
+  }
+  
+  // 1. Card exit animation
+  loginCard.classList.remove('card-enter');
+  loginCard.classList.add('card-exit');
+  loginCard.classList.add('switching');
+  
+  // 2. Content slide out
+  contentWrapper.classList.remove('slide-in');
+  contentWrapper.classList.add('slide-out');
+  
+  setTimeout(() => {
+    // Update content based on tab
     if (isSignUp) {
       formTitle.textContent = 'Create Account';
       formSubtitle.textContent = 'Join us and start your journey';
       btnText.textContent = 'Sign Up';
       confirmWrapper.style.display = 'block';
-      document.getElementById('passwordInput').placeholder = 'Password';
+      rememberForgot.style.display = 'none'; // Hide remember/forgot on Sign Up
+      passwordInput.placeholder = 'Password';
     } else {
       formTitle.textContent = 'Welcome Back';
       formSubtitle.textContent = 'Sign in to continue your premium experience';
       btnText.textContent = 'Sign In';
       confirmWrapper.style.display = 'none';
-      document.getElementById('passwordInput').placeholder = 'Password';
+      rememberForgot.style.display = 'flex'; // Show remember/forgot on Sign In
+      passwordInput.placeholder = 'Password';
     }
     
     // Clear errors
     document.getElementById('passwordWrapper').classList.remove('error');
     document.getElementById('errorMessage').classList.remove('show');
-  });
+    
+    // 3. Card enter animation
+    loginCard.classList.remove('card-exit');
+    loginCard.classList.add('card-enter');
+    
+    // 4. Content slide in
+    contentWrapper.classList.remove('slide-out');
+    contentWrapper.classList.add('slide-in');
+    
+    setTimeout(() => {
+      loginCard.classList.remove('switching');
+      isAnimating = false;
+    }, 400);
+  }, 300);
+}
+
+signinTab.addEventListener('click', function() {
+  if (this.classList.contains('active')) return;
+  switchTab('signin');
+});
+
+signupTab.addEventListener('click', function() {
+  if (this.classList.contains('active')) return;
+  switchTab('signup');
 });
 
 // ============================================
 // 2. EYE TOGGLE
 // ============================================
-const passwordInput = document.getElementById('passwordInput');
 const eyeToggle = document.getElementById('eyeToggle');
 const eyeIcon = document.getElementById('eyeIcon');
 
@@ -712,12 +1174,36 @@ eyeToggle.addEventListener('click', function(e) {
 });
 
 // ============================================
-// 3. LOGIN / SIGNUP LOGIC with AUTO-DISMISS (Item 11)
+// 3. CAPS LOCK WARNING
 // ============================================
-const emailInput = document.getElementById('emailInput');
+const capsWarning = document.getElementById('capsWarning');
+
+passwordInput.addEventListener('keydown', function(e) {
+  if (e.getModifierState('CapsLock')) {
+    capsWarning.classList.add('show');
+  } else {
+    capsWarning.classList.remove('show');
+  }
+});
+
+passwordInput.addEventListener('keyup', function(e) {
+  if (e.getModifierState('CapsLock')) {
+    capsWarning.classList.add('show');
+  } else {
+    capsWarning.classList.remove('show');
+  }
+});
+
+passwordInput.addEventListener('blur', function() {
+  capsWarning.classList.remove('show');
+});
+
+// ============================================
+// 4. LOGIN / SIGNUP LOGIC
+// ============================================
 const passwordWrapper = document.getElementById('passwordWrapper');
 const errorMessage = document.getElementById('errorMessage');
-const confirmInput = document.getElementById('confirmInput');
+const rememberMe = document.getElementById('rememberMe');
 let errorTimeout = null;
 
 loginButton.addEventListener('click', function(e) {
@@ -728,7 +1214,7 @@ loginButton.addEventListener('click', function(e) {
   passwordWrapper.classList.remove('error');
   errorMessage.classList.remove('show');
   
-  const isSignUp = document.querySelector('.tab-btn.active').dataset.tab === 'signup';
+  const isSignUp = signupTab.classList.contains('active');
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
   const confirm = confirmInput.value.trim();
@@ -746,7 +1232,6 @@ loginButton.addEventListener('click', function(e) {
   
   if (isSignUp && confirm !== password) {
     hasError = true;
-    // Custom message for signup mismatch
     showError('⚠️ Passwords do not match. Please try again.');
     return;
   }
@@ -770,6 +1255,11 @@ loginButton.addEventListener('click', function(e) {
       </svg>
     `;
     
+    // Show remember me status (only for Sign In)
+    if (!isSignUp && rememberMe.checked) {
+      console.log('Remember me checked - session saved');
+    }
+    
     setTimeout(() => {
       this.classList.remove('success');
       this.innerHTML = `<span class="btn-text">${isSignUp ? 'Sign Up' : 'Sign In'}</span>`;
@@ -777,13 +1267,11 @@ loginButton.addEventListener('click', function(e) {
   }, 1500);
 });
 
-// Show error with auto-dismiss (Item 11 - 3 seconds)
 function showError(message) {
   errorMessage.textContent = message;
   passwordWrapper.classList.add('error');
   errorMessage.classList.add('show');
   
-  // Auto-dismiss after 3 seconds
   clearTimeout(errorTimeout);
   errorTimeout = setTimeout(() => {
     passwordWrapper.classList.remove('error');
@@ -811,44 +1299,50 @@ confirmInput.addEventListener('input', function() {
 });
 
 // ============================================
-// 4. 3D TILT EFFECT (Item 12 - micro-interactions)
+// 5. 3D TILT EFFECT
 // ============================================
 const tiltContainer = document.getElementById('tiltContainer');
-const loginCard = document.querySelector('.login-card');
+const card = document.querySelector('.login-card');
 
-tiltContainer.addEventListener('mousemove', function(e) {
-  const rect = this.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  
-  const xPercent = x / rect.width;
-  const yPercent = y / rect.height;
-  
-  const maxRotate = 8;
-  const rotateX = (yPercent - 0.5) * -maxRotate * 2;
-  const rotateY = (xPercent - 0.5) * maxRotate * 2;
-  
-  this.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  
-  const shadowX = (xPercent - 0.5) * 20;
-  const shadowY = (yPercent - 0.5) * 20;
-  loginCard.style.boxShadow = `
-    0 30px 80px -20px rgba(0,0,0,0.8),
-    ${shadowX}px ${shadowY}px 60px -20px rgba(6, 182, 212, 0.15),
-    inset 0 1px 0 rgba(255,255,255,0.05)
-  `;
-});
+// Only enable tilt on devices that support hover
+if (window.matchMedia('(hover: hover)').matches) {
+  tiltContainer.addEventListener('mousemove', function(e) {
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const xPercent = x / rect.width;
+    const yPercent = y / rect.height;
+    
+    const maxRotate = 8;
+    const rotateX = (yPercent - 0.5) * -maxRotate * 2;
+    const rotateY = (xPercent - 0.5) * maxRotate * 2;
+    
+    this.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    
+    const shadowX = (xPercent - 0.5) * 20;
+    const shadowY = (yPercent - 0.5) * 20;
+    card.style.boxShadow = `
+      0 30px 80px -20px rgba(0,0,0,0.8),
+      ${shadowX}px ${shadowY}px 60px -20px rgba(6, 182, 212, 0.15),
+      inset 0 1px 0 rgba(255,255,255,0.05)
+    `;
+  });
 
-tiltContainer.addEventListener('mouseleave', function() {
-  this.style.transform = 'rotateX(0deg) rotateY(0deg)';
-  loginCard.style.boxShadow = `
-    0 30px 80px -20px rgba(0,0,0,0.8),
-    inset 0 1px 0 rgba(255,255,255,0.05)
-  `;
-});
+  tiltContainer.addEventListener('mouseleave', function() {
+    this.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    card.style.boxShadow = `
+      0 30px 80px -20px rgba(0,0,0,0.8),
+      inset 0 1px 0 rgba(255,255,255,0.05)
+    `;
+  });
+} else {
+  // Disable tilt on touch devices
+  tiltContainer.style.transform = 'none';
+}
 
 // ============================================
-// 5. THEME TOGGLE (Item 14)
+// 6. THEME TOGGLE
 // ============================================
 const themeToggle = document.getElementById('themeToggle');
 let darkMode = true;
@@ -860,10 +1354,9 @@ themeToggle.addEventListener('click', function() {
 });
 
 // ============================================
-// 6. KEYBOARD SHORTCUTS (Item 12)
+// 7. KEYBOARD SHORTCUTS
 // ============================================
 document.addEventListener('keydown', function(e) {
-  // Enter to submit
   if (e.key === 'Enter') {
     const active = document.activeElement;
     if (active === emailInput || active === passwordInput || active === confirmInput) {
@@ -871,7 +1364,6 @@ document.addEventListener('keydown', function(e) {
     }
   }
   
-  // Escape to clear errors (Item 12)
   if (e.key === 'Escape') {
     clearTimeout(errorTimeout);
     passwordWrapper.classList.remove('error');
@@ -880,9 +1372,36 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ============================================
-// 7. AUTO-FOCUS (Item 12)
+// 8. SOCIAL BUTTONS
 // ============================================
-setTimeout(() => emailInput.focus(), 500);
+document.getElementById('googleBtn').addEventListener('click', function() {
+  alert('Google authentication coming soon!');
+});
+
+document.getElementById('githubBtn').addEventListener('click', function() {
+  alert('GitHub authentication coming soon!');
+});
+
+// ============================================
+// 9. AUTO-FOCUS (with delay for mobile)
+// ============================================
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+setTimeout(() => {
+  if (!isMobile) {
+    emailInput.focus();
+  }
+}, 500);
+
+// ============================================
+// 10. HANDLE RESIZE EVENTS
+// ============================================
+let resizeTimeout;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    // Adjust any dynamic sizing if needed
+  }, 200);
+});
 </script>
 
 </body>
