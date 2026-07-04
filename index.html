@@ -13,7 +13,7 @@ body {
   background: #07070B;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  perspective: 1000px; /* For 3D tilt effect */
+  perspective: 1000px;
 }
 
 /* ===== THE GOD-TIER BACKGROUND ===== */
@@ -28,7 +28,7 @@ body {
     #07070B;
 }
 
-/* === FLOATING ORB 1 - Teal Giant === */
+/* === FLOATING ORBS === */
 .orb-1 {
   position: absolute;
   width: 60vmin;
@@ -41,7 +41,6 @@ body {
   animation: floatOrb1 20s ease-in-out infinite;
 }
 
-/* === FLOATING ORB 2 - Purple Beast === */
 .orb-2 {
   position: absolute;
   width: 50vmin;
@@ -54,7 +53,6 @@ body {
   animation: floatOrb2 25s ease-in-out infinite;
 }
 
-/* === FLOATING ORB 3 - Pink Diamond === */
 .orb-3 {
   position: absolute;
   width: 30vmin;
@@ -67,7 +65,6 @@ body {
   animation: floatOrb3 18s ease-in-out infinite;
 }
 
-/* === FLOATING ORB 4 - Gold Core === */
 .orb-4 {
   position: absolute;
   width: 20vmin;
@@ -80,7 +77,7 @@ body {
   animation: floatOrb4 15s ease-in-out infinite;
 }
 
-/* === AURORA WAVE (Bottom) === */
+/* === AURORA WAVE === */
 .aurora {
   position: absolute;
   bottom: -10%;
@@ -93,7 +90,7 @@ body {
   animation: auroraWave 30s ease-in-out infinite;
 }
 
-/* === SPARKLE PARTICLES (Pure CSS) === */
+/* === SPARKLE PARTICLES === */
 .particles {
   position: absolute;
   inset: 0;
@@ -127,7 +124,7 @@ body {
 .particle:nth-child(14) { top: 55%; left: 35%; --duration: 4.1s; --delay: 1.1s; }
 .particle:nth-child(15) { top: 18%; left: 15%; --duration: 5.8s; --delay: 0.9s; }
 
-/* === VIGNETTE (Cinema Quality) === */
+/* === VIGNETTE === */
 .vignette {
   position: absolute;
   inset: 0;
@@ -147,7 +144,7 @@ body {
   margin: 20px;
 }
 
-/* === GLASS CARD (The Login Form) === */
+/* === GLASS CARD === */
 .login-card {
   width: 100%;
   padding: clamp(32px, 5vw, 56px);
@@ -163,25 +160,27 @@ body {
   transform-style: preserve-3d;
 }
 
-/* === SHIMMER EFFECT ON CARD (Extra Premium) === */
+/* === SHIMMER BORDER === */
 .login-card::before {
   content: '';
   position: absolute;
-  inset: 0;
+  inset: -1px;
   border-radius: clamp(20px, 3vw, 32px);
-  padding: 1px;
   background: linear-gradient(135deg, 
     rgba(6, 182, 212, 0.3), 
     rgba(124, 58, 237, 0.3),
     rgba(236, 72, 153, 0.3),
     rgba(6, 182, 212, 0.3)
   );
+  background-size: 300% 300%;
+  animation: shimmerBorder 6s ease-in-out infinite;
+  z-index: -1;
+  pointer-events: none;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  pointer-events: none;
-  background-size: 300% 300%;
-  animation: shimmerBorder 6s ease-in-out infinite;
+  padding: 1px;
 }
 
 .login-card h2 {
@@ -198,7 +197,9 @@ body {
   margin-bottom: 32px;
 }
 
-/* === INPUT WRAPPER (For password toggle) === */
+/* ============================================
+   INPUT WRAPPER WITH EYE (instead of password box)
+   ============================================ */
 .input-wrapper {
   position: relative;
   width: 100%;
@@ -207,7 +208,7 @@ body {
 
 .input-wrapper input {
   width: 100%;
-  padding: 16px 50px 16px 20px; /* Extra right padding for toggle button */
+  padding: 16px 48px 16px 20px;  /* make room for the eye icon */
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 12px;
@@ -228,31 +229,56 @@ body {
   color: rgba(255,255,255,0.25);
 }
 
-/* === SHOW/HIDE PASSWORD TOGGLE === */
-.toggle-password {
+/* 🔥 KILL BROWSER DEFAULT EYE - COMPLETELY */
+.input-wrapper input[type="password"]::-ms-reveal,
+.input-wrapper input[type="password"]::-webkit-clear-button,
+.input-wrapper input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.input-wrapper input::-ms-clear,
+.input-wrapper input::-ms-reveal {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* ===== CUSTOM EYE ICON ===== */
+.eye-toggle {
   position: absolute;
   right: 16px;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.3);
+  width: 24px;
+  height: 24px;
   cursor: pointer;
-  padding: 4px;
-  transition: all 0.3s;
-  font-size: 18px;
+  color: rgba(255,255,255,0.35);
+  transition: color 0.3s, transform 0.2s;
+  background: transparent;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  z-index: 5;
 }
 
-.toggle-password:hover {
+.eye-toggle:hover {
   color: rgba(255,255,255,0.7);
 }
 
-.toggle-password svg {
-  width: 20px;
-  height: 20px;
+.eye-toggle:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+.eye-toggle svg {
+  width: 22px;
+  height: 22px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -260,16 +286,12 @@ body {
   stroke-linejoin: round;
 }
 
-/* === ERROR STATE (Red Glow) === */
+/* === ERROR STATE === */
 .input-wrapper.error input {
   border-color: rgba(239, 68, 68, 0.6);
   background: rgba(239, 68, 68, 0.08);
   box-shadow: 0 0 30px rgba(239, 68, 68, 0.15), inset 0 0 30px rgba(239, 68, 68, 0.05);
   animation: errorShake 0.5s ease-in-out;
-}
-
-.input-wrapper.error .toggle-password {
-  color: rgba(239, 68, 68, 0.5);
 }
 
 /* === ERROR MESSAGE === */
@@ -293,7 +315,7 @@ body {
 }
 
 /* === LOGIN BUTTON === */
-.login-card button {
+.login-card button[type="submit"] {
   width: 100%;
   padding: 16px;
   background: linear-gradient(135deg, #06B6D4, #7C3AED);
@@ -309,16 +331,16 @@ body {
   margin-top: 8px;
 }
 
-.login-card button:hover {
+.login-card button[type="submit"]:hover {
   transform: scale(1.02);
   box-shadow: 0 10px 40px rgba(6, 182, 212, 0.3);
 }
 
-.login-card button:active {
+.login-card button[type="submit"]:active {
   transform: scale(0.98);
 }
 
-.login-card button::after {
+.login-card button[type="submit"]::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -326,17 +348,17 @@ body {
   pointer-events: none;
 }
 
-/* === BUTTON LOADING STATE === */
-.login-card button.loading {
+/* === BUTTON LOADING === */
+.login-card button[type="submit"].loading {
   pointer-events: none;
   opacity: 0.7;
 }
 
-.login-card button.loading .btn-text {
+.login-card button[type="submit"].loading .btn-text {
   visibility: hidden;
 }
 
-.login-card button.loading::before {
+.login-card button[type="submit"].loading::before {
   content: '';
   position: absolute;
   width: 20px;
@@ -414,12 +436,14 @@ body {
   .orb-4 { width: 30vmin; height: 30vmin; bottom: 20%; left: -10%; }
   .aurora { height: 30%; bottom: -5%; }
   .tilt-container { margin: 12px; }
+  .input-wrapper input { padding: 14px 44px 14px 16px; }
+  .eye-toggle { right: 12px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ===== THE BACKGROUND ===== -->
+<!-- ===== BACKGROUND ===== -->
 <div class="background">
   <div class="orb-1"></div>
   <div class="orb-2"></div>
@@ -428,30 +452,18 @@ body {
   <div class="aurora"></div>
   
   <div class="particles">
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
   </div>
   
   <div class="vignette"></div>
 </div>
 
-<!-- ===== 3D TILT CONTAINER ===== -->
+<!-- ===== 3D TILT CARD ===== -->
 <div class="tilt-container" id="tiltContainer">
-  
-  <!-- ===== LOGIN CARD ===== -->
   <div class="login-card">
     <h2>Welcome Back</h2>
     <p>Sign in to continue your premium experience</p>
@@ -461,11 +473,11 @@ body {
       <input type="email" id="emailInput" placeholder="Email address" autocomplete="email" />
     </div>
     
-    <!-- Password Input with Toggle -->
+    <!-- Password Input with EYE (instead of password box) -->
     <div class="input-wrapper" id="passwordWrapper">
       <input type="password" id="passwordInput" placeholder="Password" autocomplete="current-password" />
-      <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
-        <!-- Eye Icon (SVG) -->
+      <button type="button" class="eye-toggle" id="eyeToggle" aria-label="Toggle password visibility">
+        <!-- Eye icon (open) -->
         <svg viewBox="0 0 24 24" id="eyeIcon">
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
           <circle cx="12" cy="12" r="3" />
@@ -478,7 +490,7 @@ body {
       ⚠️ Invalid email or password. Please try again.
     </div>
     
-    <button id="loginButton">
+    <button type="submit" id="loginButton">
       <span class="btn-text">Sign In</span>
     </button>
   </div>
@@ -486,25 +498,29 @@ body {
 
 <script>
 // ============================================
-// 1. SHOW/HIDE PASSWORD TOGGLE
+// 1. EYE TOGGLE (instead of password box)
 // ============================================
 const passwordInput = document.getElementById('passwordInput');
-const toggleBtn = document.getElementById('togglePassword');
+const eyeToggle = document.getElementById('eyeToggle');
 const eyeIcon = document.getElementById('eyeIcon');
 
-toggleBtn.addEventListener('click', function() {
-  const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-  passwordInput.setAttribute('type', type);
+eyeToggle.addEventListener('click', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
   
-  // Toggle eye icon
-  if (type === 'text') {
-    // Eye with slash (hidden)
+  const isPassword = passwordInput.type === 'password';
+  passwordInput.type = isPassword ? 'text' : 'password';
+  
+  // Update icon
+  if (isPassword) {
+    // Switch to "eye-off" (slash through eye)
     eyeIcon.innerHTML = `
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
       <line x1="1" y1="1" x2="23" y2="23" />
     `;
   } else {
-    // Regular eye
+    // Back to open eye
     eyeIcon.innerHTML = `
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
       <circle cx="12" cy="12" r="3" />
@@ -513,44 +529,36 @@ toggleBtn.addEventListener('click', function() {
 });
 
 // ============================================
-// 2. RED GLOW ON WRONG PASSWORD (with demo)
+// 2. RED GLOW ON WRONG PASSWORD
 // ============================================
 const loginButton = document.getElementById('loginButton');
 const emailInput = document.getElementById('emailInput');
 const passwordWrapper = document.getElementById('passwordWrapper');
 const errorMessage = document.getElementById('errorMessage');
 
-// Demo: Click login to test error state
 loginButton.addEventListener('click', function(e) {
   e.preventDefault();
   
-  // Show loading state
   this.classList.add('loading');
   
-  // Simulate API call
   setTimeout(() => {
     this.classList.remove('loading');
     
-    // Demo: If email is empty OR password is less than 3 chars -> show error
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
     
     if (email === '' || password === '' || password.length < 3) {
-      // Show error on password field
       passwordWrapper.classList.add('error');
       errorMessage.classList.add('show');
       
-      // Remove error after 3 seconds (or user can type to clear)
       setTimeout(() => {
         passwordWrapper.classList.remove('error');
         errorMessage.classList.remove('show');
       }, 3000);
     } else {
-      // Success! Remove any errors
       passwordWrapper.classList.remove('error');
       errorMessage.classList.remove('show');
       
-      // Show success feedback
       const btnText = this.querySelector('.btn-text');
       btnText.textContent = '✅ Welcome!';
       setTimeout(() => {
@@ -560,7 +568,6 @@ loginButton.addEventListener('click', function(e) {
   }, 1500);
 });
 
-// Clear error when user types
 passwordInput.addEventListener('input', function() {
   passwordWrapper.classList.remove('error');
   errorMessage.classList.remove('show');
@@ -572,30 +579,25 @@ emailInput.addEventListener('input', function() {
 });
 
 // ============================================
-// 3. 3D TILT EFFECT ON MOUSE MOVE
+// 3. 3D TILT EFFECT
 // ============================================
 const tiltContainer = document.getElementById('tiltContainer');
 const loginCard = document.querySelector('.login-card');
 
 tiltContainer.addEventListener('mousemove', function(e) {
-  // Get mouse position relative to container
   const rect = this.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
   
-  // Calculate percentage (0 to 1)
   const xPercent = x / rect.width;
   const yPercent = y / rect.height;
   
-  // Calculate rotation (max ±8 degrees)
   const maxRotate = 8;
   const rotateX = (yPercent - 0.5) * -maxRotate * 2;
   const rotateY = (xPercent - 0.5) * maxRotate * 2;
   
-  // Apply 3D transform
   this.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
   
-  // Add subtle shadow shift
   const shadowX = (xPercent - 0.5) * 20;
   const shadowY = (yPercent - 0.5) * 20;
   loginCard.style.boxShadow = `
@@ -605,7 +607,6 @@ tiltContainer.addEventListener('mousemove', function(e) {
   `;
 });
 
-// Reset tilt when mouse leaves
 tiltContainer.addEventListener('mouseleave', function() {
   this.style.transform = 'rotateX(0deg) rotateY(0deg)';
   loginCard.style.boxShadow = `
@@ -615,7 +616,7 @@ tiltContainer.addEventListener('mouseleave', function() {
 });
 
 // ============================================
-// 4. KEYBOARD SHORTCUT: Press Enter to login
+// 4. KEYBOARD SHORTCUT: Enter to login
 // ============================================
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') {
